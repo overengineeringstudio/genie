@@ -46,10 +46,38 @@ bun add -g @overengineering/genie
 genie **/*.genie.ts
 ```
 
-## Supported Formats
+## File plugins
 
-- `package.json`
-- `tsconfig.json`
+### Built-in
+
+- `packageJSON`
+- `tsconfigJSON`
+
+### Wishlist
+
+- GitHub actions
+- VSCode settings
+
+### Build your own
+
+```ts
+// my-plugin.ts
+type MyPluginArgs = {
+  // ...
+}
+
+export const myPlugin = (args: MyPluginArgs): string => {
+  // ...
+  return '...'
+}
+
+// my-config.genie.ts
+import { myPlugin } from './my-plugin.js'
+
+export default myPlugin({
+  // ...
+})
+```
 
 ## FAQ
 
@@ -71,7 +99,27 @@ Ultimately that's up to you, but it can be useful to speed up CI processes and a
 
 Together with my friend [Nathan Herald](https://github.com/myobie) we've been thinking of names of this project related to "TypeScript", code generation and which should be short and memorable. After a bit of brainstorming we came up with `genie` and we both liked it. 🧞
 
-## Todo
+## Development of `genie`
+
+### Design goals
+
+- Simple
+- Fast
+- Flexible
+
+### Local setup
+
+Requires:
+- Bun
+- PNPM
+
+```bash
+pnpm install
+pnpm build
+# or `pnpm watch` to run in watch mode
+```
+
+### Todo
 
 - Support inline JS execution (e.g. for `package.json` scripts)
 - Derive Effect schema from JSON schemas (e.g. for Biome plugin)

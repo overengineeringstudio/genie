@@ -5,7 +5,7 @@ export default packageJSON({
 	version: '0.0.0',
 	description: 'TypeScript code generation utilities 4',
 	type: 'module',
-	files: ['dist', 'src'],
+	files: ['dist', 'src', 'bin'],
 	exports: {
 		'.': {
 			import: './dist/src/lib/mod.js',
@@ -13,7 +13,7 @@ export default packageJSON({
 		},
 	},
 	bin: {
-		genie: './dist/cli-bundle/cli.js',
+		genie: './bin/genie',
 	},
 	scripts: {
 		build_cli:
@@ -22,6 +22,7 @@ export default packageJSON({
 			'bun build src/cli.ts --target node --outdir dist/cli-bundle --sourcemap --watch',
 		build_lib: 'tsc --build',
 		build: 'pnpm run build_cli && pnpm run build_lib',
+		watch: 'pnpm run build_cli_watch & pnpm run build_lib --watch',
 	},
 	dependencies: {},
 	devDependencies: {
