@@ -59,6 +59,13 @@ A modern TypeScript codebase (especially monorepos) contain a lot of config/setu
 
 - No comments (e.g. to explain why a particular line of config is needed and how it relates to other parts of the codebase)
 - Duplication/repetition
+- No type safety
+
+Those are all problems that TypeScript is solving, so why not use TypeScript to write your config files? That's the core idea behind this project, it's now just a matter of making this approach as convenient and ergonomic as possible which is what `genie` aims to do.
+
+### Should I add generated files to version control (e.g. add `package.json` to `git`)?
+
+Ultimately that's up to you, but it can be useful to speed up CI processes and avoid having to regenerate the files.
 
 ### Where does the name `genie` come from?
 
