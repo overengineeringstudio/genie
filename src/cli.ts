@@ -73,7 +73,7 @@ const generateFile = Effect.fn('generateFile')(function* ({
 
   const targetFilePath = path.join(cwd, targetFileName)
 
-  yield* fs.remove(targetFilePath)
+  yield* fs.remove(targetFilePath, { force: true })
   yield* fs.writeFileString(targetFilePath, fileContentString)
   yield* Effect.log(
     `Generated ${targetFilePath} ${readOnly ? '(read-only)' : '(writable)'}`,
