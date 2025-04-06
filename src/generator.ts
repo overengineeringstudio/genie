@@ -228,6 +228,10 @@ const generate = Effect.fn('generate')(function* (config: GeneratorConfig) {
   yield* writeModuleEntrypoint(moduleEntrypointContents)
 })
 
+//
+// CLI
+//
+
 const cli = Cli.Command.make(
   'genie-generator',
   {
