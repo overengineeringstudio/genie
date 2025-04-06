@@ -119,6 +119,40 @@ pnpm build
 # or `pnpm watch` to run in watch mode
 ```
 
+### Adding new converters
+
+Genie is capable of generating new converters when pointing it to a valid JSON Schema.
+
+Open the `genie.config.json` in this repository and add a new converter configuration entry, like:
+
+```json
+{
+  "converters": [
+    {
+      "id": "my-config-json",
+      "name": "Support for my-config-json",
+      "source": {
+        "type": "json-schema",
+        "url": "https://examples.com/path/to/json-schema-definition"
+      },
+      "output": {
+        "format": "json"
+      }
+    },
+  ]
+}
+```
+
+Afterwards, when executing `pnpm build`, Genie is capable of handling this configuration format as well:
+
+```ts
+import { myConfigJSON } from '@overengineering/genie'
+
+export default myConfigJSON({
+  // ...
+})
+```
+
 ### Todo
 
 - Support inline JS execution (e.g. for `package.json` scripts)

@@ -1,0 +1,37 @@
+{
+  "converters": [
+    {
+      "id": "package-json",
+      "name": "Support for package.json",
+      "source": {
+        "type": "json-schema",
+        "url": "https://json.schemastore.org/package.json"
+      },
+      "output": {
+        "format": "json"
+      }
+    },
+    {
+      "id": "tsconfig-json",
+      "name": "Support for tsconfig.json",
+      "source": {
+        "type": "json-schema",
+        "url": "https://json.schemastore.org/tsconfig.json"
+      },
+      "output": {
+        "format": "json"
+      }
+    },
+    {
+      "id": "biome-json",
+      "name": "Support for biome.json",
+      "source": {
+        "type": "json-schema",
+        "url": "https://biomejs.dev/schemas/latest/schema.json"
+      },
+      "output": {
+        "format": "json"
+      }
+    }
+  ]
+}

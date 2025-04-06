@@ -1,0 +1,19 @@
+diff --git a/dist/src/parser.js b/dist/src/parser.js
+index c9c677936c2ee0885fff518c1938a1da9157ebbc..95efb9b67281a15204d036ef7bea1d362edbc659 100644
+--- a/dist/src/parser.js
++++ b/dist/src/parser.js
+@@ -319,12 +319,13 @@ function parseSchema(schema, options, processed, usedNames, parentSchemaName) {
+             const comment = `This interface was referenced by \`${parentSchemaName}\`'s JSON-Schema definition
+ via the \`patternProperty\` "${key.replace('*/', '*\\/')}".`;
+             ast.comment = ast.comment ? `${ast.comment}\n\n${comment}` : comment;
++            ast.keyName = singlePatternProperty ? '[k: string]' : key
+             return {
+                 ast,
+                 isPatternProperty: !singlePatternProperty,
+                 isRequired: singlePatternProperty || (0, lodash_1.includes)(schema.required || [], key),
+                 isUnreachableDefinition: false,
+-                keyName: singlePatternProperty ? '[k: string]' : key,
++                keyName: ast.keyName,
+             };
+         }));
+     }

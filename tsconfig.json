@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig.json",
   "compilerOptions": {
     "strict": true,
     "noUncheckedIndexedAccess": true,
@@ -21,7 +22,7 @@
       "ES2024"
     ],
     "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "nodenext",
     "disableSourceOfProjectReferenceRedirect": true,
     "plugins": [
       {

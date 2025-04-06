@@ -76,6 +76,7 @@ const generateFile = Effect.fn('generateFile')(function* ({
   // We add the `force` flag here so the `remove` function does not return an error
   // if the file did not exist initially.
   yield* fs.remove(targetFilePath, { force: true })
+
   yield* fs.writeFileString(targetFilePath, fileContentString)
   yield* Effect.log(
     `Generated ${targetFilePath} ${readOnly ? '(read-only)' : '(writable)'}`,
