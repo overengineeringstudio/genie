@@ -12,13 +12,13 @@
         pkgs-unstable = import nixpkgs-unstable { inherit system; };
         corepack = pkgs.runCommand "corepack-enable" {} ''
           mkdir -p $out/bin
-          ${pkgs.nodejs_23}/bin/corepack enable --install-directory $out/bin
+          ${pkgs.nodejs_22}/bin/corepack enable --install-directory $out/bin
         '';
       in
       {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
-            nodejs_23
+            nodejs_22
             corepack
             pkgs-unstable.bun
           ];

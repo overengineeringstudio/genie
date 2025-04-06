@@ -3,7 +3,7 @@ import { packageJSON } from '@overengineering/genie'
 export default packageJSON({
   name: '@overengineering/genie',
   version: '0.0.0',
-  description: 'TypeScript code generation utilities 4',
+  description: 'TypeScript code generation utilities',
   type: 'module',
   files: ['dist', 'src', 'bin'],
   exports: {
@@ -21,10 +21,14 @@ export default packageJSON({
     build_cli_watch:
       'bun build src/cli.ts --target node --outdir dist/cli-bundle --sourcemap --watch',
     build_lib: 'tsc --build',
-    build: 'pnpm run build_cli && pnpm run build_lib',
+    build: 'pnpm generate && pnpm run build_cli && pnpm run build_lib',
     watch: 'pnpm run build_cli_watch & pnpm run build_lib --watch',
+    generate: 'bun run src/generator.ts',
+    format: 'biome check --write .',
   },
-  dependencies: {},
+  dependencies: {
+    'json-schema-to-typescript': '15.0.4',
+  },
   devDependencies: {
     '@effect/cli': '0.57.0',
     '@effect/platform': '0.78.0',
@@ -36,4 +40,9 @@ export default packageJSON({
     effect: '3.13.7',
   },
   packageManager: 'pnpm@10.2.1',
+  pnpm: {
+    patchedDependencies: {
+      'json-schema-to-typescript': 'patches/json-schema-to-typescript.patch',
+    },
+  },
 })

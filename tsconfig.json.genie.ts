@@ -21,7 +21,7 @@ export default tsconfigJSON({
     target: 'ES2024',
     lib: ['ES2024'],
     module: 'NodeNext',
-    moduleResolution: 'NodeNext',
+    moduleResolution: 'nodenext',
     // NOTE this is helping to speed up tsc performance (particularly in VSC during auto-complete) - Thanks Patrick Roza
     disableSourceOfProjectReferenceRedirect: true,
     plugins: [{ name: '@effect/language-service' }],
