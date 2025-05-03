@@ -119,6 +119,18 @@ pnpm build
 # or `pnpm watch` to run in watch mode
 ```
 
+### Recommended VSCode / Cursor settings
+
+#### `explorer.fileNesting.patterns`
+
+![](https://share.cleanshot.com/cdGBWPZY+)
+
+```json
+	"explorer.fileNesting.patterns": {
+		"*.genie.ts": "${capture}"
+	}
+```
+
 ### Todo
 
 - Support inline JS execution (e.g. for `package.json` scripts)
