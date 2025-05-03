@@ -4,30 +4,10 @@ import { NodeContext, NodeHttpClient, NodeRuntime } from '@effect/platform-node'
 import { Data, Effect, Layer, Match, Schema } from 'effect'
 
 import { compile } from 'json-schema-to-typescript'
+import { ConverterConfig, GeneratorConfig } from './config-defs.js'
+import { config } from './libs.js'
 
 const LIB_PATH = './src/lib'
-const CONFIG_PATH = './genie.config.json'
-
-const ConverterConfig = Schema.Struct({
-  id: Schema.NonEmptyString,
-  name: Schema.NonEmptyString,
-  description: Schema.optional(Schema.String),
-  source: Schema.Struct({
-    type: Schema.Literal('json-schema'),
-    url: Schema.URL,
-  }),
-  output: Schema.Struct({
-    format: Schema.Literal('json'),
-  }),
-})
-
-type ConverterConfig = typeof ConverterConfig.Type
-
-const GeneratorConfig = Schema.Struct({
-  converters: Schema.Array(ConverterConfig),
-})
-
-type GeneratorConfig = typeof GeneratorConfig.Type
 
 //
 // Errors
@@ -64,12 +44,12 @@ const generateTypesFromJsonSchema = Effect.fn('generateTypesFromJsonSchema')(
     // For example, when the id is `package-json`, we remove the `-json` suffix,
     // if the `output.format` is `json`.
     const prefix = converterConfig.id
-      .replace(converterConfig.output.format, '')
+      .replace(converterConfig.output._tag, '')
       .replace(/-/g, '')
 
     // Then we take the extracted prefix, the output format and PascalCase them
     // to derive the name of the main type. In the end: `package-json` becomes `PackageJSON`.
-    const name = `${prefix.charAt(0).toUpperCase()}${prefix.slice(1)}${converterConfig.output.format.toUpperCase()}`
+    const name = `${prefix.charAt(0).toUpperCase()}${prefix.slice(1)}${converterConfig.output._tag.toUpperCase()}`
     const mainTypeName = `${name}Args`
 
     // We have to inject the title into the schema because it then gets
@@ -107,7 +87,7 @@ const generateConverterFunction = Effect.fn('generateConverterFunction')(
   function* (converterConfig: ConverterConfig) {
     yield* Effect.logInfo(`Generating code for "${converterConfig.name}" ...`)
 
-    const types = yield* Match.value(converterConfig.source.type).pipe(
+    const types = yield* Match.value(converterConfig.source._tag).pipe(
       Match.when('json-schema', () =>
         Effect.gen(function* () {
           const jsonSchema = yield* fetchJsonSchema(converterConfig)
@@ -165,6 +145,9 @@ const writeConverterFunction = Effect.fn('writeConverterFunction')(function* (
     new TextEncoder().encode(contents),
   )
 
+  // Make the file read-only
+  yield* fs.chmod(path.join(LIB_PATH, fileName), 0o444)
+
   yield* Effect.logInfo(`Generated ${fileName}.`)
 })
 
@@ -194,6 +177,9 @@ const writeModuleEntrypoint = Effect.fn('writeModuleEntrypoint')(function* (
     path.join(LIB_PATH, 'mod.ts'),
     new TextEncoder().encode(contents),
   )
+
+  // Make the file read-only
+  yield* fs.chmod(path.join(LIB_PATH, 'mod.ts'), 0o444)
 
   yield* Effect.logInfo('Generated module entrypoint.')
 })
@@ -238,14 +224,6 @@ const cli = Cli.Command.make(
     cwd: Cli.Options.text('cwd').pipe(Cli.Options.withDefault(process.cwd())),
   },
   Effect.fn(function* () {
-    const fs = yield* FileSystem.FileSystem
-
-    const contents = yield* fs.readFile(CONFIG_PATH)
-
-    const config = yield* Schema.decode(Schema.parseJson(GeneratorConfig))(
-      contents.toString(),
-    )
-
     yield* generate(config).pipe(Effect.scoped)
 
     yield* Effect.logInfo('✅ Done.')
